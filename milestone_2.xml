@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config_Module2" doc:name="HTTP Listener config" doc:id="df58db36-e96b-49c7-bb82-914c9cc8104c" >
+		<http:listener-connection host="localhost" port="8089" />
+	</http:listener-config>
+	<flow name="milestone_1Flow" doc:id="8c214757-42c9-46ab-8e1c-6138574db9f7" >
+		<http:listener doc:name="Listener" doc:id="38c7535d-911c-415a-85c7-8da05796d216" path="/calculate2" config-ref="HTTP_Listener_config_Module2" outputMimeType="application/json"/>
+		<ee:transform doc:name="Transform Message" doc:id="921e1a4d-a462-4978-8427-7f9ef5f3695d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ((item)->{
+	"Addition": item.num1 + item.num2,
+	"Subtraction": item.num1 - item.num2,
+	"Multiplication": item.num1 * item.num2,
+	"Division": item.num1 / item.num2 
+	})
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
